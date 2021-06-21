@@ -1,0 +1,7 @@
+venv
+.idea
+.DS_Store
+__pycache__
+*.pkl
+/data/result/
+/data/statistic/

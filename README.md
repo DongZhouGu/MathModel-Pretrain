@@ -4,6 +4,7 @@
 
 ### :notebook: 更新日志
 - ……
+- 6/21: gdz增加画图demo以及2020年B题的资料，供学习
 - 6/17: gdz更新项目使用说明
 
 
@@ -26,7 +27,9 @@
 
 - **code：** 使用jupyter来编写Python代码 **(在文件开头写上此份代码的说明注释)** ，jupyter对数据分析、画图、调试等非常友好，上传的code demo可以是基于小案例编写的，多写注释，上传的代码一定是自己能跑通的，比如这个[Kaggle的.ipynb](https://github.com/SudalaiRajkumar/Kaggle/blob/master/GhoulsGoblinsGhost/kaggle_simple_exploration_notebook.ipynb)，是不是看着很爽很清晰。
   - 画图demo: 不多说了，一定要是自己跑通的.ipynb文件
-  - 算法demo: 可以是近几年赛题的复现或者一些案例的算法项目
+  - 算法demo: 一些跑过的案例算法项目或者算法代码模板
+  - 历年赛题：历年赛题的代码以及论文
+  - tmp: 搜罗来的代码学习资料，学习的过程中整理到画图demo/算法demo
 - **建模算法：** 存放相关算法的pdf、ppt、markdown文件，作为大家一起的学习资源
 - **实用工具**：一些你觉得值得分享的工具如**Typora**
 - **论文模板：** 再说吧

@@ -1,0 +1,289 @@
+#两步迭代使用A*算法中的第二次迭代关键代码，第一次迭代代码与此类似
+import numpy as np
+import pandas as pd
+import math
+import collections
+from functools import reduce
+from joblib import load
+from sklearn.pipeline import Pipeline
+
+RON_pipeline = load("RON_pipeline.bz2")
+
+S_pipeline = load("S_pipeline.bz2")
+
+X_RON = pd.read_csv("train_lgbm/RON_loss_data.csv")
+
+X_RON.head()
+
+X = pd.read_csv("processed.csv")
+
+X_S = pd.read_csv("train_lgbm/S_data.csv")
+X_S.head()
+
+def predict_RON_S(vector):
+    '''
+    vector: 11维变量
+    return: tuple: (RON_pred, S_pred)
+    '''
+    # 将11维变量加上RON的原料数据
+    concat = np.array([X.loc[132, "raw1"]]+np.array(vector).flatten().tolist())
+    # op21在向量的第3个（从0开始数）
+    op21 = concat[3]
+    s_vector = X.loc[132,  X_S.drop("label", axis=1).columns]
+    s_vector["op21"] = op21
+    RON_pred = RON_pipeline.predict(concat.reshape(1, -1)).flatten()[0]
+    S_pred = S_pipeline.predict(s_vector.values.reshape(1, -1)).flatten()[0]
+    return RON_pred, S_pred
+    
+    
+
+
+
+
+predict_RON_S([121.3461,34.2690,4.9924,0.1060,123.3863,59.7742,321.5952,32.7367,11.2289,412.8519,-2.2292])
+
+df=pd.DataFrame({'id':0,
+                 'location':[[121.3461, 34.4524, 4.9924, 0.0386, 120.7679, 52.7805, 321.5952, 32.7367, 8.8462, 410.3512, -2.2292]],
+                                     #dtype='float'),
+                 'G':0,
+                 'H':100,#等待更新
+                 'F':100,#f=h+g
+                 'father':-1,#父节点id
+                 'S':3.2,#当前操作（location）对应的产品中的硫含量
+                 'U':False,#当前位置是否超出边界（多维立方体）
+                 'NOV_LOSS':1.3    
+}
+
+)
+
+df
+
+RON_op_csv=pd.read_csv('RON_op.csv')
+lower=RON_op_csv.loc[:,'lower']
+upper=RON_op_csv.loc[:,'upper']
+delta=RON_op_csv.loc[:,'delta']
+print(RON_op_csv)
+delta=np.array(delta)[[1,3,4,5,8,9]].tolist()
+
+lower=np.array(lower)[[1,3,4,5,8,9]].tolist()
+upper=np.array(upper)[[1,3,4,5,8,9]].tolist() 
+delta
+
+destination=[121.3461,34.2690,4.9924,0.1060,123.3863,59.7742,321.5952,32.7367,11.2289,412.8519,-2.2292]
+distance=list(map(lambda x,y:x-y,destination,df.iloc[0,1]))
+distance_grid=list(map(lambda x,y:x/y,distance,RON_op_csv.loc[:,'delta']))
+distance_grid=list(map(lambda x:abs(x),distance_grid))#取绝对值
+distance_grid=list(map(lambda x:math.ceil(x),distance_grid))
+distance,distance_grid
+
+open_list=set()  #使用集合
+close_list=set()
+
+def is_in_area(local):     #用于判断是否在可行范围内
+    local=np.array(local)[[1,3,4,5,8,9]].tolist() 
+    length=len(local)
+    for i in range(length):
+        if(local[i]>upper[i] or local[i]<lower[i]):
+            return False
+        else: continue
+    return True
+
+is_in_area([124.7590,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.3506])
+
+def is_in_same_block(local1,local2):    #用于判断是否达到终点附近
+    local1=np.array(local1)[[1,3,4,5,8,9]].tolist()
+    local2=np.array(local2)[[1,3,4,5,8,9]].tolist() 
+    length=len(local1)
+    for i in range(length):
+        dist=abs(local1[i]-local2[i])
+        if(dist>delta[i]):return False
+        else:
+            continue
+    return True
+    
+
+is_in_same_block([124.7590,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.8506],[125.6589,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.3506])
+
+def cal_nibor_dis(local1,local2):     #计算临近点的距离,其实就是A*算法中的G
+    local1=np.array(local1)[[1,3,4,5,8,9]].tolist()
+    local2=np.array(local2)[[1,3,4,5,8,9]].tolist()   
+    distance=list(map(lambda x,y:x-y,local1,local2))
+    distance_grid=list(map(lambda x,y:abs(x/y),distance,delta))
+    dimension=collections.Counter(distance_grid)[1.0]
+    result=math.ceil((dimension**0.5)*10)
+    return result
+
+cal_nibor_dis([124.7590,33.4524,-1.1529,0.0386,120.7679,57.7805,263.1875,70.6342,8.8462,410.3512,0.8506],[125.7590,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.8506])
+
+def cal_H(local1,local2):    #也就是计算当前位置距离终点的欧氏距离，也就是H
+    local1=np.array(local1)[[1,3,4,5,8,9]].tolist()
+    local2=np.array(local2)[[1,3,4,5,8,9]].tolist()
+    distance=list(map(lambda x,y:x-y,local1,local2))
+    distance=list(map(lambda x,y:abs(x/y),distance,delta))
+    distance_square=list(map(lambda x:x**2,distance))  #列表元素先平方
+    H=math.ceil(10*(reduce(lambda x,y:x+y,distance_square))**0.5)
+    return H*5
+
+cal_H([127.6590,37.8824,-2.1529,0.0386,120.7679,57.7805,263.1875,70.6342,8.8462,410.3512,0.8506],[124.7590,33.4524,-1.1529,0.0386,120.7679,57.7805,263.1875,70.6342,8.8462,410.3512,0.8506])
+
+def toStr(num,base):
+    convertString = "0123456789ABCDEF"#最大转换为16进制
+    if num < base:
+        return convertString[num]
+    else:
+        return toStr(num//base,base)+ convertString[num%base]
+
+def trans_ternay_to_location(l1,l2):   #注意l1为11维也就是中心点的坐标，l2为转为3进制后的列表（邻居），可能小于11维
+    #l1=np.array(l1)[[1,3,4,5,8,9]].tolist()
+    len2=len(l2)
+    add=[0]*(len(l1)-len2)
+    result=add+l2   #前面补领
+    result=[i-1 for i in result]  #0,1,2变为 -1,0,1
+    real_result=list(map(lambda x,y:x*y,result,delta))
+    location=list(map(lambda x,y:x+y,real_result,l1))
+    return location
+
+trans_ternay_to_location([1,2,3,4,5],[1,1])
+
+def create_nighbor(local,i):        #将一个点的所有nibor加入主表中
+    s=local.copy()
+    local=np.array(local)[[1,3,4,5,8,9]].tolist()                  #因为是11个特征所以是11维空间，每个维度有加一，减一，不变，三种选择
+    if(i==111111): pass  #这个点就是中心点（因为后面我要给每一位减一）
+    ls=list(toStr(i,3))
+    ls=[int(i) for i in ls]
+    loc=trans_ternay_to_location(local,ls)
+    s[1]=loc[0]
+    s[3]=loc[1]
+    s[4]=loc[2]
+    s[5]=loc[3]
+    s[8]=loc[4]
+    s[9]=loc[5]
+    #s[9]=loc[6]
+    #s[10]=loc[7]
+    return s
+
+create_nighbor([124.6589,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.3506],4)
+
+def pick_minF_in_open_list():     #遍历 open list ，查找 F 值最小的节点，把它作为当前要处理的节点。
+    global open_list
+    d0=df[df['id'].isin(open_list)]
+    #print(d0)
+    d1=d0[d0['F']==d0['F'].min()]
+    return d1
+
+pick_minF_in_open_list()
+
+def cal_location_arrtibute(local1,local2,id0):  #local1是center，local2是正要添加进主表中的点，id0用于记录当前的item是第几个id
+    nov_los,s=predict_RON_S(local2)
+    g=cal_nibor_dis(local1,local2)
+    h=cal_H(local2,destination)
+    global df
+    new={'id':id0,
+         'location':local2,
+         'G':g,
+         'H':h,
+         'F':h+g,
+         'father':df['id'][df['location'].apply(lambda x: x==local1)].values[0],#local1的id
+         'S':s,
+         'U': not is_in_area(local2),
+         'NOV_LOSS':nov_los        
+    }
+    df=df.append(new,ignore_index=True)
+    id0=id0+1    
+    return id0
+
+def result(destination):
+    result=pd.DataFrame({'id':0,
+                     'location':[[124.6589,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.3506]],                                         
+                     'father':0,#父节点id
+                     'S':3.2,#当前操作（location）对应的产品中的硫含量
+                     'NOV_LOSS':1.3    
+    }
+    )
+    global df
+    
+    goal_id=df['id'][df['location'].apply(lambda x: x==destination)].values[0]
+    father=df['father'][df['id']==goal_id].values[0]
+    while(father!=-1):
+        #print('yes')
+        r={'id':father,
+           'location': df['location'][df['id']==father].values[0],
+           'father':df['father'][df['id']==father].values[0],
+           'S': df['S'][df['id']==father].values[0],
+           'NOV_LOSS': df['NOV_LOSS'][df['id']==father].values[0]            
+        }
+        result=result.append(r,ignore_index=True)
+        father=df['father'][df['id']==father].values[0]
+    return result
+
+def main_method(local1,local2):    #代表起点和终点
+    #a=df[df['location'].apply(lambda row: row.find([124.6589,34.4524,-0.1529,0.0386,120.7679,52.7805,263.1875,70.6342,8.8462,410.3512,0.3506]))]
+    global open_list
+    global close_list
+    global df
+    open_list.add(0)
+    id0=1
+    while(len(open_list)!=0 ):       
+        now_center=pick_minF_in_open_list()
+        print(len(now_center))
+        now_center_loc=now_center.iloc[0,1]
+        now_center_id=now_center.iloc[0,0]
+        print("id:",id0,"now_center_loc:",now_center_loc)
+        print('-----'*30)
+        print('S',df['S'][df['location'].apply(lambda x: x==now_center_loc)].values[0])
+        close_list.add(now_center.iloc[0,0])
+        open_list.remove(now_center.iloc[0,0])
+        for i in range(3**6):
+
+            new_nighbor=create_nighbor(now_center_loc,i)
+
+            if(is_in_same_block(new_nighbor,destination)):
+                print('到达终点，结束计算')
+                #将new_nighbor的father设成center
+                id0=cal_location_arrtibute(now_center_loc,new_nighbor,id0)
+                #将destination的father设成new_nighbor
+                id0=cal_location_arrtibute(new_nighbor,destination,id0)
+                ans=result(destination)
+                return ans
+
+            elif(len(df[df['location'].apply(lambda x: x==new_nighbor)])>0):    #说明new_nighbor已经计算过了   
+
+                if(df['S'][df['location'].apply(lambda x: x==new_nighbor)].values[0])>5 or \
+                   df['U'][df['location'].apply(lambda x: x==new_nighbor)].values[0]==True or \
+                   df['id'][df['location'].apply(lambda x: x==new_nighbor)].values[0] in (close_list): continue
+                elif(not df['id'][df['location'].apply(lambda x: x==new_nighbor)].values[0] in (open_list)):
+                    print('#'*20,'error','#'*20)
+                else:
+                    g=cal_nibor_dis(new_nighbor,now_center_loc)
+                    if(g<df['G'][df['location'].apply(lambda x: x==new_nighbor)].values[0]):
+                        df['G'][df['location'].apply(lambda x: x==new_nighbor)].values[0]=g
+                        h=df['H'][df['location'].apply(lambda x: x==new_nighbor)].values[0]
+                        df['F'][df['location'].apply(lambda x: x==new_nighbor)].values[0]=h
+                        df['father'][df['location'].apply(lambda x: x==new_nighbor)].values[0]=now_center_id
+                    else:continue
+                
+            else:     #说明没有计算过，且不与终点相邻
+
+                id0=cal_location_arrtibute(now_center_loc,new_nighbor,id0) #不会出现将close里的点的father改了的情况，因为这个else情况下，遇到的点都是新点，既不在open也不在close
+
+                if(df['S'][df['location'].apply(lambda x: x==new_nighbor)].values[0]>5 or \
+                   df['U'][df['location'].apply(lambda x: x==new_nighbor)].values[0]==True or \
+                   df['id'][df['location'].apply(lambda x: x==new_nighbor)].values[0] in (close_list)): continue  #对于这种情况（没有计算过）其实不会出现这一行的情况
+                elif(not df['id'][df['location'].apply(lambda x: x==new_nighbor)].values[0] in (open_list)):
+
+                    open_list.add(df['id'][df['location'].apply(lambda x: x==new_nighbor)].values[0])
+                else:
+                    print('#'*20,'error','#'*20)
+
+                
+                
+                
+                
+    print('没有路径')
+    return False
+
+
+
+yes=main_method([121.3461, 34.4524, 4.9924, 0.0386, 120.7679, 52.7805, 321.5952, 32.7367, 8.8462, 410.3512, -2.2292],destination)
+
+yes.to_csv("yes_5_2.csv")

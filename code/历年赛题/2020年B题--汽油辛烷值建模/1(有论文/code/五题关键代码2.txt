@@ -1,0 +1,132 @@
+#五题关键代码2
+#根据第一次迭代的路径文件，画出硫产量以及辛烷值损失以及各主要操作变量随迭代次数增加的曲线图
+df=pd.read_csv('yes_5.csv')  #yes_5.csv是第一次迭代完成后得到的路径
+df=df.iloc[:,1:]
+df
+
+f=lambda x :eval(x[0])
+df_lo=df.iloc[:,1]
+df_lo=df_lo.to_frame().apply(f,axis=1)
+df_lo=df_lo.to_frame()
+
+df_lo.columns=['location']
+df_lo
+
+df=df.drop('location',axis=1)
+df=pd.concat([df,df_lo],axis=1)
+#df.insert(1,'location',df_lo)
+df
+
+x1={'id':-2,
+    
+    'father':5599,
+    'S':4.374830829607802,
+    'RON_LOSS':1.0421672472867054,
+    'location':[[121.3461, 34.4524, 4.9924, 0.0386, 120.7679, 52.7805, 321.5952, 32.7367, 8.8462, 410.3512, -2.2292]],
+}
+x1
+y1=pd.DataFrame(x1)
+y1
+
+df=pd.DataFrame(np.insert(df.values, 1, values=y1, axis=0))
+
+df.columns=['id','father','S','RON_LOSS','location']
+
+df
+
+def main_method(df):
+    S=[]
+    RON_LOSS=[]
+    var0=[]
+    var2=[]
+    var6=[]
+    var7=[]
+    var10=[]
+    for i in range(60):
+        
+        #item=df.iloc[60-i,:]
+        S.append(df.iat[60-i,2])
+        RON_LOSS.append(df.iat[60-i,3])
+        var0.append(np.array(df.iat[60-i,4])[0])
+        var2.append(np.array(df.iat[60-i,4])[2])
+        var6.append(np.array(df.iat[60-i,4])[6])
+        var7.append(np.array(df.iat[60-i,4])[7])
+        var10.append(np.array(df.iat[60-i,4])[10])
+    return S,RON_LOSS,var0,var2,var6,var7,var10
+
+S,RON_LOSS,var0,var2,var6,var7,var10=main_method(df)
+
+S=np.array(S)
+S=S.reshape(60,-1)
+RON_LOSS=np.array(RON_LOSS)
+RON_LOSS=RON_LOSS.reshape(60,-1)
+var0=np.array(var0)
+var0=var0.reshape(60,-1)
+var2=np.array(var2)
+var2=var2.reshape(60,-1)
+var6=np.array(var6)
+var6=var6.reshape(60,-1)
+var7=np.array(var7)
+var7=var7.reshape(60,-1)
+var10=np.array(var10)
+var10=var10.reshape(60,-1)
+
+x_line=np.arange(0,60,1)
+x_line.shape
+
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['figure.figsize']=(15,15)
+plt.rcParams['axes.unicode_minus'] = False
+#plt.supertitle('第一轮迭代中硫含量、辛烷值损失、以及部分操作变量变化曲线')
+plt.subplot(3,3,1)
+plt.plot(x_line,S,'r',label='硫含量')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('硫含量',fontsize = 15)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.subplot(3,3,2)
+plt.plot(x_line,RON_LOSS,'r',label='辛烷值损失')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('辛烷值损失',fontsize = 15)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.subplot(3,3,3)
+plt.plot(x_line,var0,label='稳定塔下部温度')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('稳定塔下部温度',fontsize = 10)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.subplot(3,3,4)
+plt.plot(x_line,var2,label='精制汽油出装置硫含量')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('精制汽油出装置硫含量',fontsize = 15)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.subplot(3,3,5)
+plt.plot(x_line,var6,label='D-102温度')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('D-102温度',fontsize = 15)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.subplot(3,3,6)
+plt.plot(x_line,var7,label='R-101下部床层压降')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('R-101下部床层压降',fontsize = 15)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.subplot(3,3,7)
+plt.plot(x_line,var10,label='D101原料缓冲罐压力')
+plt.xlabel('迭代次数',fontsize = 15)
+plt.ylabel('D101原料缓冲罐压力',fontsize = 15)
+plt.legend()
+plt.grid(alpha=0.5)
+
+plt.savefig('first_it.pdf')
+plt.show()
+
