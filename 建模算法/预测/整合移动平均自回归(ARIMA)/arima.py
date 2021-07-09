@@ -98,6 +98,7 @@ class Arima:
         print('ARIMA建模使用参数：p=%s,d=%s,q=%s' % (self.p, self.d, self.q))
         model = ARIMA(series, order=(self.p, self.d, self.q)).fit()
         predict_n = model.forecast(n)[0]
+        print(model.summary())
 
         fit_v = model.fittedvalues
         for _ in range(self.d):
