@@ -49,8 +49,8 @@ def rf_impute(data):
     '''
 
     copy_data = data.copy()
-    miss_columns = copy_data.isnull().sum()[data.isnull().sum() != 0].sort_values().index.tolist()
-    unmiss_columns = copy_data.isnull().sum()[data.isnull().sum() == 0].sort_values().index.tolist()
+    miss_columns = copy_data.isnull().sum()[copy_data .isnull().sum() != 0].sort_values().index.tolist()
+    unmiss_columns = copy_data.isnull().sum()[copy_data .isnull().sum() == 0].sort_values().index.tolist()
     for col in miss_columns:
         X_train = copy_data[copy_data[col].notnull()][unmiss_columns].values
         Y_train = copy_data[copy_data[col].notnull()][col].values
