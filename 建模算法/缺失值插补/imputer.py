@@ -5,23 +5,23 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
 
 
-### »æÖÆÈ±Ê§±äÁ¿µÄÈÈÍ¼
+### ç»˜åˆ¶ç¼ºå¤±å˜é‡çš„çƒ­å›¾
 def miss_heatamp(data, title):
     cols = data.columns
-    colours = ['#006699', '#ffff99']  ## µÚÒ»ÏîÃ»È±Ê§µÄÑÕÉ«£¬µÚ¶şÏî£¬È±Ê§µÄÑÕÉ«
+    colours = ['#006699', '#ffff99']  ## ç¬¬ä¸€é¡¹æ²¡ç¼ºå¤±çš„é¢œè‰²ï¼Œç¬¬äºŒé¡¹ï¼Œç¼ºå¤±çš„é¢œè‰²
 
     plt.figure(figsize=(12, 8))
-    plt.rcParams['font.sans-serif'] = ['SimHei']  # ºÚÌå
-    plt.rcParams['axes.unicode_minus'] = False  # ½â¾öÎŞ·¨ÏÔÊ¾·ûºÅµÄÎÊÌâ
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # é»‘ä½“
+    plt.rcParams['axes.unicode_minus'] = False  # è§£å†³æ— æ³•æ˜¾ç¤ºç¬¦å·çš„é—®é¢˜
     sns.set(font='SimHei', font_scale=1)
     f = sns.heatmap(data[cols].isnull(), cmap=sns.color_palette(colours))
     f.set_title(title)
 
-### È±Ê§ÖµµÄÖ±·½Í¼
+### ç¼ºå¤±å€¼çš„ç›´æ–¹å›¾
 def miss_bar(data, title):
     '''
-    data : dataframe¸ñÊ½µÄÊı¾İ£¬ĞĞÎªÊı¾İ£¬ÁĞÎªÌØÕ÷
-    title : Í¼±íÃû×Ö
+    data : dataframeæ ¼å¼çš„æ•°æ®ï¼Œè¡Œä¸ºæ•°æ®ï¼Œåˆ—ä¸ºç‰¹å¾
+    title : å›¾è¡¨åå­—
     '''
     missValue2miss_num = {}
     for col in data.columns:
@@ -34,23 +34,23 @@ def miss_bar(data, title):
     df = df.T
 
     plt.figure(figsize=(10, 8))
-    plt.rcParams['font.sans-serif'] = ['SimHei']  # ºÚÌå
-    plt.rcParams['axes.unicode_minus'] = False  # ½â¾öÎŞ·¨ÏÔÊ¾·ûºÅµÄÎÊÌâ
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # é»‘ä½“
+    plt.rcParams['axes.unicode_minus'] = False  # è§£å†³æ— æ³•æ˜¾ç¤ºç¬¦å·çš„é—®é¢˜
     sns.set(font='SimHei', font_scale=1)
 
     f = sns.barplot(x=df.index, y=df['miss_num'], color='#336699')
     f.set_title(title)
 
 
-### Ëæ»úÉ­ÁÖ²åÖµ
+### éšæœºæ£®æ—æ’å€¼
 def rf_impute(data):
     '''
-    data:dataframe¸ñÊ½
+    data:dataframeæ ¼å¼
     '''
 
     copy_data = data.copy()
-    miss_columns = copy_data.isnull().sum()[copy_data .isnull().sum() != 0].sort_values().index.tolist()
-    unmiss_columns = copy_data.isnull().sum()[copy_data .isnull().sum() == 0].sort_values().index.tolist()
+    miss_columns = copy_data.isnull().sum()[copy_data.isnull().sum() != 0].sort_values().index.tolist()
+    unmiss_columns = copy_data.isnull().sum()[copy_data.isnull().sum() == 0].sort_values().index.tolist()
     for col in miss_columns:
         X_train = copy_data[copy_data[col].notnull()][unmiss_columns].values
         Y_train = copy_data[copy_data[col].notnull()][col].values
