@@ -1,9 +1,12 @@
 # MathModel-pretrain
 ### 此项目用于数学建模比赛准备阶段，祝愿咱们队伍斩获佳绩:smiley:
 
-
 ### :notebook: 更新日志
+
+- 8.21：gdz增加了带约束优化中的gurobi求解器demo以AutoML的使用反馈
+
 - 7/29：yys增加了lstm和灰色关联度分析相关代码
+- 7/24：gdz增加了线性回归和pytorch的ensemble代码
 - 7/10：yys增加了因子分析法和PCA降维相关代码
 - 7/9: gdz增加灰色预测以及ARIMA模型代码
 - 6/21: gdz增加画图demo以及2020年B题的资料，供学习
