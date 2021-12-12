@@ -10,11 +10,10 @@
 ### 此项目用于数学建模比赛准备阶段，祝愿咱们队伍斩获佳绩:smiley:
 
 ### :notebook: 更新日志
-
+- 12/12：lx增加机器学习pipline代码
+- 12/12：yys增加kaggle预测题例子
 - 12/12：gdz增加可视化例子，EDA的几个自动可视化包
-
 - 8/21：gdz增加了带约束优化中的gurobi求解器demo以AutoML的使用反馈
-
 - 7/29：yys增加了lstm和灰色关联度分析相关代码
 - 7/24：gdz增加了线性回归和pytorch的ensemble代码
 - 7/10：yys增加了因子分析法和PCA降维相关代码
@@ -41,13 +40,11 @@
 大概分了四类
 
 - **code：** 使用jupyter来编写Python代码 **(在文件开头写上此份代码的说明注释)** ，jupyter对数据分析、画图、调试等非常友好，上传的code demo可以是基于小案例编写的，多写注释，上传的代码一定是自己能跑通的，比如这个[Kaggle的.ipynb](https://github.com/SudalaiRajkumar/Kaggle/blob/master/GhoulsGoblinsGhost/kaggle_simple_exploration_notebook.ipynb)，是不是看着很爽很清晰。
-  - 画图demo: 不多说了，一定要是自己跑通的.ipynb文件
-  - 算法demo: 一些跑过的案例算法项目或者算法代码模板
   - 历年赛题：历年赛题的代码以及论文
   - tmp: 搜罗来的代码学习资料，学习的过程中整理到画图demo/算法demo
-- **建模算法：** 存放相关算法的pdf、ppt、markdown、code文件，作为大家一起的学习资源
+- **建模算法：** 存放复现算法的code文件
 - **实用工具**：一些你觉得值得分享的工具如**Typora**
-- **论文模板：** 再说吧
+- **论文模板：** word
 - **杂七杂八：** 一些你觉得无法分类的资料，比如别人的感想经验等
 
 
