@@ -8,7 +8,7 @@
 
 <p align="left">
 <a href="https://github.com/DongZhouGu/MathModel-Pretrain" target="_blank">
-	<img src="https://gitee.com/ma_tung_zhou/imageuse1/raw/master/imgg/20211230223714.png#pic_center" width=""/>
+	<img src="https://cdn.jsdelivr.net/gh/dongzhougu/imageuse1/img20211231164708.png#pic_center" width=""/>
 </a>
 </p>
 
@@ -76,7 +76,7 @@ filetree
 
 ## 🚀 算法索引
 
-[数学建模模型总结](./建模算法/数学建模 四大模型总结 - 百度文库.pdf)
+[数学建模模型总结](https://github.com/DongZhouGu/MathModel-Pretrain/blob/master/%E5%BB%BA%E6%A8%A1%E7%AE%97%E6%B3%95/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1%20%E5%9B%9B%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%80%BB%E7%BB%93%20-%20%E7%99%BE%E5%BA%A6%E6%96%87%E5%BA%93.pdf)
 
 ### 特征相关
 
