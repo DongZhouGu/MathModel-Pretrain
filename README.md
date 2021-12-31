@@ -28,10 +28,10 @@
   <summary>文档目录</summary>
   <ol>
     <li><a href="#简介">简介</a></li>
-    <li><a href="#🔨 待办事项">待办事项</a></li>
-    <li><a href="#💻 项目目录说明">项目目录说明</a></li>
+    <li><a href="#-待办事项">待办事项</a></li>
+    <li><a href="#-项目目录说明">项目目录说明</a></li>
     <li>
-      <a href="#🚀 算法索引">算法索引</a>
+      <a href="#-算法索引">算法索引</a>
       <ul>
         <li><a href="#特征相关">特征相关</a></li>
         <li><a href="#时间序列">时间序列</a></li>
@@ -40,12 +40,11 @@
         <li><a href="#可视化">可视化</a></li>
       </ul>
     </li>
-    <li><a href="#📫 如何参与开源项目">参与此项目</a></li>
-    <li><a href="#🤝 贡献者">贡献者</a></li>
-    <li><a href="#☕  鸣谢">鸣谢</a></li>
+    <li><a href="#-如何参与开源项目">参与此项目</a></li>
+    <li><a href="#-贡献者">贡献者</a></li>
+    <li><a href="#-鸣谢">鸣谢</a></li>
   </ol>
 </details>
-
 
 
 
@@ -62,14 +61,14 @@
 
 ```
 filetree 
-├── README.md   你现在看到的内容
+├── README.md       你现在看到的内容
 ├── README_OLD.md   比赛准备阶段的README
-└── 建模算法    各种机器学习的demo和代码
-└── 论文模板    2021论文word模板
-└── 实用工具    一些值得分享的工具或网站
-└── 杂七杂八    经验、PPT资料等
+└── 建模算法         各种机器学习的demo和代码
+└── 论文模板         2021论文word模板
+└── 实用工具         一些值得分享的工具或网站
+└── 杂七杂八         经验、PPT资料等
 └── code  
-	└── 历年赛题  整理搜罗的历年赛题代码
+    └── 历年赛题         整理搜罗的历年赛题代码
     └── tmp		团队初期用于学习的代码
 ```
 
@@ -77,13 +76,13 @@ filetree
 
 ## 🚀 算法索引
 
-**[数学建模模型总结](./建模算法/数学建模 四大模型总结 - 百度文库.pdf)**
+[数学建模模型总结](./建模算法/数学建模 四大模型总结 - 百度文库.pdf)
 
 ### 特征相关
 
 - [组合赋权法](./建模算法/组合赋权法/组合赋权.md)—[code](./建模算法/组合赋权法/组合赋权.md)
 - [因子分析法](./建模算法/降维/因子分析法.md)—[code](./建模算法/降维/factor_analyze.py)—[demo](./建模算法/降维/terrorism.ipynb)
-- PCA—[code—[demo](./建模算法/组合赋权法/组合赋权.md)](./建模算法/降维/terrorism.ipynb)
+- PCA—[code](./建模算法/降维/terrorism.ipynb)—[demo](./建模算法/组合赋权法/组合赋权.md)
 - [聚类wkmeans](./建模算法/聚类/划分聚类/wkmeans.md)—[code](./建模算法/聚类/划分聚类/wkmeans.py)
 - [灰色关联](./建模算法/灰色关联度分析/灰色关联度分析.md)—[code](./建模算法/灰色关联度分析/GRA.py)
 - [逻辑回归关联](./建模算法/logistic_similar/logstic_similar.md)—[code](./建模算法/logistic_similar/logstic_similar.py)
@@ -115,14 +114,14 @@ filetree
 - [seaborn](./code/tmp/seaborn/README.md)—[demo](./code/tmp/seaborn/Searborn.ipynb)
 
 - 可视化以恐怖袭击为例—[demo](./建模算法/可视化/可视化以恐怖袭击为例.ipynb)
-- 可视化以covid-19为例—[demo1](./code/tmp/案例/covid19/COVID-19_ EDA with recent update on April.ipynb)—[demo2](./code/tmp/案例/covid19/coronavirus-covid-19-visualization-prediction.ipynb)
+- 可视化以covid-19为例—[demo](./code/tmp/案例/covid19/coronavirus-covid-19-visualization-prediction.ipynb)
 - 自动EDA包：pandas-profiling、sweetviz、dataprep、lux、AutoViz 
 
 
 
 ## 📫 如何参与开源项目
 
-贡献使开源社区成为一个学习、激励和创造的绝佳场所。你所作的任何贡献都是**非常感谢**的。
+贡献使开源社区成为一个学习、激励和创造的绝佳场所。
 
 1. Fork这个项目
 2. 创建您的单独分支  (`git checkout -b your_branch`)
