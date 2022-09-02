@@ -12,6 +12,9 @@
 </a>
 </p>
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=DongZhouGu/MathModel-Pretrain&type=Date)](https://star-history.com/#DongZhouGu/MathModel-Pretrain&Date)
 
 ## 简介
 
